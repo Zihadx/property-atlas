@@ -1,34 +1,50 @@
-# Data dictionary: `02 Master Database`
+# Data dictionary
 
-72 rows, record IDs `DPM-001` to `DPM-072`. Columns A-O and U-Z are typed values; P-T are formulas.
+## data/listings.csv
 
-| Col | Field | Description |
-|---|---|---|
-| A | Record ID | Unique ID (`DPM-nnn`); also the key in `06 Source Register` |
-| B | Listing Summary | Title as shown on the portal, lightly normalised |
-| C | Area | One of Mirpur, Uttara, Mohammadpur, Dhanmondi, Bashundhara R/A |
-| D | Specific Location | Sub-area where stated, otherwise "Not stated" |
-| E | Source Platform | bdHousing or Aabason |
-| F | Original Listing URL | Page the record was taken from. For results-page records this is the shared results page, not a unique listing URL |
-| G | Size (sq ft) | Apartment size |
-| H | Bedrooms | As in the portal's structured field |
-| I | Bathrooms | As in the portal's structured field |
-| J | Condition (Standardized) | Ready, Brand new, Brand new (future handover), Almost ready, Under construction, Used, or Not stated |
-| K | Condition Group | Ready or Brand new / Almost Ready or Under Construction / Used / Not stated |
-| L | Floor | As stated, otherwise "Not stated" |
-| M | Parking Spaces | As stated, otherwise "Not stated". A stated 0 is a real value |
-| N | Asking Price (BDT) | Total asking price |
-| O | Listed Price per sq ft (BDT) | Rate printed by the portal, or "Not listed" |
-| P | Calculated Price per sq ft (BDT) | Formula `=N/G` |
-| Q | Listed vs Calculated Gap (%) | Formula; "n/a" when no listed rate |
-| R | Pricing Verification Status | Formula: Consistent (within 2%) / Discrepancy / Total only |
-| S | Size Segment | Formula: size band |
-| T | Outlier Flag | Formula: Tukey fences from `03 Pricing Analysis` C29:C30 |
-| U | Listing Date | Date shown by the portal, or "Not stated" |
-| V | Research Collection Date | Date the record was collected |
-| W | Evidence Level | Results page only / Individual listing page checked |
-| X | Data Quality Tier | Tier A (individual page) or Tier B (results page only) |
-| Y | Source Record Reference | ID in the earlier research file the record came from |
-| Z | Research Notes | Source caveats and flags, free text |
+One row per qualified listing (72 rows). Exported from sheet `02 Master Database`. Text such as "Not stated" is kept where the source did not provide a value.
 
-The sheet's used range extends to row 1000 but data ends at row 73.
+| Column | Description |
+|---|---|
+| `record_id` | Identifier, `DPM-001` to `DPM-072` |
+| `listing_summary` | Listing title as recorded |
+| `area` | One of the five study areas |
+| `specific_location` | Sub-area or landmark from the listing, or "Not stated" |
+| `source_platform` | `bdHousing` or `Aabason` |
+| `listing_url` | Page the record was taken from |
+| `size_sqft` | Apartment size in sq ft |
+| `bedrooms`, `bathrooms` | Counts from the structured fields |
+| `condition` | Standardised condition (Ready, Brand new, Almost ready, Under construction, Used, Not stated, and one "Brand new (future handover)") |
+| `condition_group` | Four groups used in the analysis: Ready or Brand new; Almost Ready or Under Construction; Used; Not stated |
+| `floor` | Floor as stated, or "Not stated" |
+| `parking_spaces` | Count, or "Not stated". A recorded 0 means the listing explicitly says no parking |
+| `asking_price_bdt` | Total asking price in BDT |
+| `listed_ppsf_bdt` | Per-sq-ft rate shown by the portal. Blank where the portal gives none |
+| `calculated_ppsf_bdt` | `asking_price_bdt / size_sqft` (formula in the workbook) |
+| `listed_vs_calculated_gap` | Listed ÷ calculated − 1. Blank where there is no listed rate |
+| `pricing_verification_status` | Consistent (within 2%), Discrepancy, or Total only |
+| `size_segment` | Size band, derived from `size_sqft` |
+| `outlier_flag` | `Outlier` or `Normal` (Tukey fences) |
+| `listing_date` | Date shown on the portal, or "Not stated" |
+| `research_collection_date` | Collection date recorded in the master sheet (see known issue 2) |
+| `evidence_level`, `data_quality_tier` | Results page only (Tier B) or individual page checked (Tier A) |
+| `source_record_reference` | Research file and row the record came from |
+| `research_notes` | Free-text notes on the record |
+
+## data/source_register.csv
+
+One row per record (72 rows). Exported from sheet `06 Source Register`.
+
+| Column | Description |
+|---|---|
+| `record_id` | Matches `listings.csv` |
+| `source_platform`, `source_url` | Portal and page |
+| `source_information` | Type of page (results card or individual page) |
+| `collection_date` | Collection date recorded in the register |
+| `listing_date` | Date shown on the portal |
+| `verification_status` | What was and was not verified |
+| `research_notes` | Free-text notes |
+
+## outputs/
+
+Written by `scripts/analyze.py`: `area_summary.csv`, `condition_summary.csv`, `size_segment_summary.csv`, `bedroom_summary.csv`, `platform_summary.csv`, `overall_metrics.csv` and `data_checks.csv`.

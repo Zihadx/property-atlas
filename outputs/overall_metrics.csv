@@ -1,0 +1,13 @@
+metric,value
+q1,7345.454545454546
+iqr,3601.747717423137
+lower_fence,1942.8329693198402
+upper_fence,16349.823839012388
+flagged,1.0
+corr_size_vs_price,0.8541903038904296
+corr_size_vs_ppsf,0.46998758898638654
+with_listed_rate,57.0
+gap_over_2pct,24.0
+median_abs_gap,0.001935483870967758
+median_abs_gap_workbook_formula,0.000671233902365953
+consistent_within_2pct,33.0

@@ -1,10 +1,14 @@
-# Excel lock/temp files
-~$*.xlsx
-.~lock.*#
-*.tmp
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
 
-# OS / editor
-.DS_Store
-Thumbs.db
+# Editors / OS
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
+
+# Excel lock files
+~$*.xlsx
